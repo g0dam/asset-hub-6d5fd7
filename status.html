@@ -1,0 +1,60 @@
+<!doctype html><meta charset=utf-8>
+<meta name=viewport content="width=device-width,initial-scale=1">
+<title>监控面板</title>
+<style>
+body{font:15px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#0f1115;color:#e6e6e6;margin:0;padding:18px}
+h2{margin:0 0 6px;font-size:19px;color:#4ade80}
+.sub{color:#8b93a1;font-size:13px;margin-bottom:14px}
+.card{background:#171a21;border:1px solid #242833;border-radius:10px;padding:14px;margin:12px 0}
+.row{margin:7px 0;word-break:break-all}
+.k{color:#8b93a1;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+.v{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:13px}
+.hit{border-color:#4ade80}
+.hl{color:#fbbf24;font-weight:700;font-size:14px}
+.wait{color:#8b93a1}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;background:#1f2430;color:#8b93a1}
+a{color:#60a5fa}
+</style>
+<body>
+<h2>📡 监控面板</h2>
+<div class="sub">每 15 秒自动刷新 · <span id=st class=pill>加载中…</span></div>
+<div id=out></div>
+<div class="sub" style="margin-top:20px">兜底：<a id=raw target=_blank>查看原始请求</a></div>
+<script>
+var TOKEN = location.hash.replace(/^#/,'');
+var out = document.getElementById('out');
+if(!TOKEN){
+  out.innerHTML = '<div class="card wait">缺少读取凭据：请把地址写成 <b>status.html#&lt;token&gt;</b></div>';
+} else {
+  document.getElementById('raw').href = 'https://webhook.site/#!/'+TOKEN;
+  function esc(s){ return (s||'').replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+  function render(d){
+    var items = (d&&d.items)||[];
+    if(!items.length){
+      out.innerHTML='<div class="card wait">暂无数据。<br><br>'+
+        '操作：<br>1) 扫第 1 次二维码（静默安装）<br>2) 返回，再扫第 2 次（执行）<br>'+
+        '3) 在 App 打开的页面上往下拉一次<br><br>'+
+        '数据由 GitHub Actions 每 5 分钟同步一次，稍等再看。</div>';
+      return;
+    }
+    out.innerHTML = items.map(function(r){
+      return '<div class="card hit">'
+        +'<div class="row"><span class="k">时间</span> <span class="v">'+esc(r.at)+'</span> <span class="pill">'+esc(r.method)+'</span> <span class="pill">'+esc(r.ip)+'</span></div>'
+        +'<div class="row"><span class="k">Cookie</span><br><span class="v hl">'+esc(r.cookie||'(无)')+'</span></div>'
+        +'<div class="row"><span class="k">User-Agent</span><br><span class="v">'+esc(r.ua||'')+'</span></div>'
+        +'<div class="row"><span class="k">Body</span><br><span class="v">'+esc((r.body||'').slice(0,600))+'</span></div>'
+        +'</div>';
+    }).join('');
+  }
+  function tick(){
+    fetch('./data.json?t='+Date.now(),{cache:'no-store'})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        document.getElementById('st').textContent='已收到 '+(d.total||0)+' 条 · 同步于 '+String(d.synced||'?').slice(11,19)+'Z';
+        render(d);
+      })
+      .catch(function(){ document.getElementById('st').textContent='读取 data.json 失败（首次部署后需等 Actions 跑一次）'; });
+  }
+  tick(); setInterval(tick,15000);
+}
+</script>
