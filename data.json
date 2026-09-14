@@ -1,6 +1,14 @@
 {
- "total": 10,
+ "total": 11,
  "items": [
+  {
+   "at": "2026-09-14 01:36:34",
+   "method": "POST",
+   "ua": "okhttp/4.12.0",
+   "cookie": "_lang=zh_CN;_country=GB;_currency=GBP;_timezone=UTC+0;jnos-login-token=isWYZCD0nIh.Q9K7I59i2jujfuUmCrAr6.6s0STD2A12yUVrsIk1JSoRpFRPAvc4;wskey=isWYZCD0nIh.Q9K7I59i2jujfuUmCrAr6.6s0STD2A12yUVrsIk1JSoRpFRPAvc4;pin=d74hftenyxy3fcsemjsqn;b2c_c_email=g0***@gmail.com;unionwsws={\"devicefinger\":\"jdd01TPO6EGCMTXMNPWNZIH3CAHJM2WHLU4T45XETTMGQVYDICLN3WLCTGPJNZH2CLR2VX53JBKHUGTBH66YIXRFE6XJZ7XOXUVOHGCTR2QQ01234567\",\"jmafinger\":\"\"};b2c_c_lang=zh_CN;req-App-Code=b2c.sdk.app;pickUpSiteId=20000068;",
+   "body": "{\"area\":\"30000004_30000005_30000006_30000007\",\"inviteCode\":\"\",\"types\":[3.0,6.0]}",
+   "ip": "2408:8240:e1c:3dd1:ca91:5e6d:133:4cf0"
+  },
   {
    "at": "2026-09-14 01:29:32",
    "method": "POST",
@@ -82,5 +90,5 @@
    "ip": "23.229.85.250"
   }
  ],
- "synced": "2026-09-14T01:30:10.589795Z"
+ "synced": "2026-09-14T06:51:11.640245Z"
 }
